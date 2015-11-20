@@ -53,7 +53,7 @@ to space considerations of this workshop manual):
         "metadata": {
             "name": "smoke-1-32gkx",
             "generateName": "smoke-1-",
-            "namespace": "userXX-smoke",
+            "namespace": "CITYNAMEuserXX-smoke",
             "selfLink": "/api/v1/namespaces/ose-roadshow-demo/pods/smoke-1-32gkx",
             "uid": "d0273a35-36c8-11e5-8992-0a8636c3fd6f",
             "resourceVersion": "161650",

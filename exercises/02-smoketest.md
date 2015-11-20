@@ -25,7 +25,7 @@ corporate-standard CA that you already have installed on your system.
 
 **Note:** On some versions of Microsoft Windows, you may get an error that the server has an invalid x.509 certificate.  If you receive this error, enter in the following command:
 
-	$ oc login master.test.openshift3roadshow.com --insecure-skip-tls-verify=true
+	$ oc login master.CITYNAME-roadshow.rhc-ose.labs.redhat.com --insecure-skip-tls-verify=true
     
 Once you issue the *oc login* command, you will be prompted for the username and password combination for your user account.  This information was provided to you by the instructor of this workshop:
 

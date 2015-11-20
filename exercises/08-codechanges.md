@@ -44,5 +44,7 @@ You should see that a new build is running:
 Once the build and deploy has finished, verify your new Docker image was
 automatically deployed by viewing the application in your browser:
 
+![Code Changes](../images/codechanges2.png)
+
 
 **End of Lab 8**
