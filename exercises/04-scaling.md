@@ -1,6 +1,6 @@
-#** Lab 5: Scaling and Self Healing **
+#**Lab 4: Scaling and Self Healing**
 
-###** Background: Deployment Configurations and Replication Controllers **
+###**Background: Deployment Configurations and Replication Controllers**
 
 While Services provide routing and load balancing for Pods, which may go in and
 out of existence, ReplicationControllers (RC) are used to specify and then
@@ -12,7 +12,7 @@ how OpenShift "self heals".
 
 A DeploymentConfiguration (DC) defines how something in OpenShift should be
 deployed. From the [deployments
-documentation](https://docs.openshift.com/enterprise/3.0/architecture/core_concepts/deployments.html#deployments-and-deployment-configurations):
+documentation](https://docs.openshift.com/enterprise/3.1/architecture/core_concepts/deployments.html#deployments-and-deployment-configurations):
 
     Building on replication controllers, OpenShift adds expanded support for the
     software development and deployment lifecycle with the concept of deployments.
@@ -26,7 +26,7 @@ ReplicationController and DeploymentConfiguration resources together. And, in
 almost all of those cases, OpenShift will create all of them for you.
 
 
-###** Exercise 3: Scaling up **
+###**Exercise 3: Scaling up**
 Now that we know what a ReplicatonController and DeploymentConfig are, we can
 start to explore scaling in OpenShift 3. Take a look at the
 ReplicationController (RC) that was created for you when you told OpenShift to
@@ -34,8 +34,8 @@ stand up the *guestbook* image:
 
     $ oc get rc
 
-    CONTROLLER    CONTAINER(S)   IMAGE(S)                      SELECTOR                                            REPLICAS
-    guestbook-1   guestbook      kubernetes/guestbook:latest   deployment=guestbook-1,deploymentconfig=guestbook   1
+    CONTROLLER    CONTAINER(S)   IMAGE(S)                                                                                       SELECTOR                                                          REPLICAS   AGE
+    guestbook-1   guestbook      kubernetes/guestbook@sha256:a49fe18bb57c8eee16e2002987e041f5ae9b5b70ae7b3d49eb60e5c26b9c6bd0   app=guestbook,deployment=guestbook-1,deploymentconfig=guestbook   1          5h
 
 Again, to get more details (once you know the name of RC), you can use the
 following command:
@@ -51,13 +51,16 @@ For example, if you just want to see how many replicas are defined for the
 
 The output of the above command should be:
 
-    "openshift.io/deployment.phase": "Complete",
+               "openshift.io/deployment.phase": "Complete",
+            "openshift.io/deployment.replicas": "1",
+            "openshift.io/encoded-deployment-config": "{\"kind\":\"DeploymentConfig\",\"apiVersion\":\"v1\",\"metadata\":{\"name\":\"guestbook\",\"namespace\":\"oseuser-guestbook\",\"selfLink\":\"/oapi/v1/namespaces/oseuser-guestbook/deploymentconfigs/guestbook\",\"uid\":\"fa5fffa6-d821-11e5-ae80-fa163e7c0b25\",\"resourceVersion\":\"21687\",\"creationTimestamp\":\"2016-02-20T22:33:35Z\",\"labels\":{\"app\":\"guestbook\"},\"annotations\":{\"openshift.io/generated-by\":\"OpenShiftNewApp\"}},\"spec\":{\"strategy\":{\"type\":\"Rolling\",\"rollingParams\":{\"updatePeriodSeconds\":1,\"intervalSeconds\":1,\"timeoutSeconds\":600,\"maxUnavailable\":\"25%\",\"maxSurge\":\"25%\"},\"resources\":{}},\"triggers\":[{\"type\":\"ConfigChange\"},{\"type\":\"ImageChange\",\"imageChangeParams\":{\"automatic\":true,\"containerNames\":[\"guestbook\"],\"from\":{\"kind\":\"ImageStreamTag\",\"name\":\"guestbook:latest\"},\"lastTriggeredImage\":\"kubernetes/guestbook@sha256:a49fe18bb57c8eee16e2002987e041f5ae9b5b70ae7b3d49eb60e5c26b9c6bd0\"}}],\"replicas\":1,\"selector\":{\"app\":\"guestbook\",\"deploymentconfig\":\"guestbook\"},\"template\":{\"metadata\":{\"creationTimestamp\":null,\"labels\":{\"app\":\"guestbook\",\"deploymentconfig\":\"guestbook\"},\"annotations\":{\"openshift.io/generated-by\":\"OpenShiftNewApp\"}},\"spec\":{\"containers\":[{\"name\":\"guestbook\",\"image\":\"kubernetes/guestbook@sha256:a49fe18bb57c8eee16e2002987e041f5ae9b5b70ae7b3d49eb60e5c26b9c6bd0\",\"ports\":[{\"containerPort\":3000,\"protocol\":\"TCP\"}],\"resources\":{},\"terminationMessagePath\":\"/dev/termination-log\",\"imagePullPolicy\":\"IfNotPresent\"}],\"restartPolicy\":\"Always\",\"terminationGracePeriodSeconds\":30,\"dnsPolicy\":\"ClusterFirst\",\"securityContext\":{}}}},\"status\":{\"latestVersion\":1,\"details\":{\"causes\":[{\"type\":\"ImageChange\",\"imageTrigger\":{\"from\":{\"kind\":\"ImageStreamTag\",\"name\":\"guestbook:latest\"}}}]}}}\n"
     --
         "spec": {
             "replicas": 1,
     --
         "status": {
             "replicas": 1,
+
 
 This lets us know that, right now, we expect one pod to be deployed (spec), and we have
 one pod actually deployed (status). By changing the spec, we can tell OpenShift
@@ -74,8 +77,8 @@ issue the following command:
 
 	$ oc get rc
     
-	CONTROLLER    CONTAINER(S)   IMAGE(S)                      SELECTOR                                            REPLICAS
-	guestbook-1   guestbook      kubernetes/guestbook:latest   deployment=guestbook-1,deploymentconfig=guestbook   3
+	CONTROLLER    CONTAINER(S)   IMAGE(S)                                                                                       SELECTOR                                                          REPLICAS   AGE
+    guestbook-1   guestbook      kubernetes/guestbook@sha256:a49fe18bb57c8eee16e2002987e041f5ae9b5b70ae7b3d49eb60e5c26b9c6bd0   app=guestbook,deployment=guestbook-1,deploymentconfig=guestbook   3          6h
 
 You can see that we now have 3 replicas.  Let's verify that with the *oc get pods* command:
 
@@ -110,7 +113,7 @@ Verify that all three Pods are running using the web console:
 
 ![Scaling](../images/scaling.png)
 
-###** Application "Self Healing" **
+###**Application "Self Healing"**
 Because OpenShift's RCs are constantly monitoring to see that the desired number
 of Pods actually is running, you might also expect that OpenShift will "fix" the
 situation if it is ever not right. You would be correct!
@@ -130,10 +133,10 @@ That's because OpenShift almost immediately detected that the current state (2
 Pods) didn't match the desired state (3 Pods), and it fixed it by scheduling
 another pod.
 
-Additionally, OpenShift provides rudimentary capabilities around checking the
+Additionally, OpenShift provides capabilities around checking the
 liveness and/or readiness of application instances. If OpenShift decided that
 our *guestbook* application instance wasn't alive, it would kill the instance
 and then start another one, always ensuring that the desired number of replicas
 was in place.
 
-**End of Lab 5**
+**End of Lab 4**

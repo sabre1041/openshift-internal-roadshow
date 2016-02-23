@@ -1,6 +1,6 @@
-#** Lab 4: Creating Routes by Exposing Services **
+#**Lab 3: Creating Routes by Exposing Services**
 
-###** Background: Routes **
+###**Background: Routes**
 
 By default, the *new-app* command does not expose the Service it creates to the
 outside world. If you want expose a service as an HTTP endpoint you can easily
@@ -16,15 +16,15 @@ expose the Service. First we want to verify that we don't already have any
 existing routes:
 
 	$ oc get routes
-    
-    NAME      HOST/PORT   PATH      SERVICE   LABELS
+
+An empty response indicates no routes are available.
 
 Now we need to get the Service name to expose:
 
 	$ oc get services
 
-    NAME        LABELS    SELECTOR                     IP(S)            PORT(S)
-    guestbook   app=guestbook    deploymentconfig=guestbook   172.30.208.199   3000/TCP
+    NAME        CLUSTER_IP       EXTERNAL_IP   PORT(S)    SELECTOR                                   AGE
+    guestbook   172.30.149.111   <none>        3000/TCP   app=guestbook,deploymentconfig=guestbook   4h
 
 Once we know the Service name, creating a route is a simple one-command task:
 
@@ -34,15 +34,15 @@ Verify the route was created with the following command:
 
 	$ oc get routes
 
-    NAME        HOST/PORT      
-    guestbook   guestbook.CITYNAMEuserXX-guestbook.apps.CITYNAME-roadshow.rhc-ose.labs.redhat.com
+    NAME        HOST/PORT                                                                PATH      SERVICE     LABELS          INSECURE POLICY   TLS TERMINATION
+    guestbook   guestbook-oseuser-guestbook.apps.city-roadshow.rhc-ose.labs.redhat.com             guestbook   app=guestbook
 
 You can also verify the route by looking at the project in OpenShift web console:
 
-![Route](../images/route.png)
+![Project Overview with Route](../images/route.png)
 
 Pretty nifty, huh?  This application is now available at the above URL:
 
-![Route](../images/route2.png)
+![Guestbook Application](../images/route2.png)
 
-**End of Lab 4**
+**End of Lab 3**

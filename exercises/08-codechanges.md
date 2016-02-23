@@ -1,4 +1,4 @@
-#** Lab 8: Making Code Changes**
+#**Lab 8: Making Code Changes**
 
 One of the benefits of OpenShift 3 is the ability to make code changes and to see the results rapidly. The *ose-rht-offices* application allows for certain offices to be "featured"" by changing the marker color to red instead of blue. We will make a small code change in the forked project you configured during the last lab. 
 
@@ -27,7 +27,7 @@ The **code** value is the field that is evaluated for the featured office
 
 Click on Commit changes at the bottom of the screen.
 
-There are multiple ways to trigger builds in OpenShift including invoking a web hook and GitHub integration. Since the roadshow environment is located on a private network, GitHub invocations cannot be utilized. Full details on the the types of triggers that can be configured are found in the [Build Triggers](https://docs.openshift.com/enterprise/3.0/dev_guide/builds.html#build-triggers) section of the documentation
+There are multiple ways to trigger builds in OpenShift including invoking a web hook and GitHub integration. Since the roadshow environment is located on a private network, GitHub invocations cannot be utilized. Full details on the the types of triggers that can be configured are found in the [Build Triggers](https://docs.openshift.com/enterprise/3.1/dev_guide/builds.html#build-triggers) section of the documentation
 
 Once you have committed your changes, start a new build of the *ose-rht-offices* project by clicking the **Start Build** button on the *Builds* page in the web console, or run the
 following command to verify:

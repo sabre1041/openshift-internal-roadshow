@@ -1,6 +1,6 @@
-#** Lab 2: Smoke Test and Quick Tour **
+#**Lab 1: Smoke Test and Quick Tour**
 
-###** Command Line **
+###**Command Line**
 
 The first thing we want to do to ensure that our *oc* command line tools was installed and successfully added to our path is login to the OpenShift Enterprise 3.0 environment that has been provided for this Roadshow session.  In order to login, we will use the *oc* command and then specify the server that we want to authenticate to.  Issue the following command:
 
@@ -37,8 +37,7 @@ Ensure that you replace *your_username* and *password* with the credentials prov
 Once you have authenticated to the OpenShift 3 server, you will see the following confirmation message:
 
     Login successful.
-    Using project "ode-roadshow-demo".
-    Welcome to OpenShift! See 'oc help' to get started.    
+    Using project "ose-roadshow-demo".
 
 Congratulations, you are now authenticated to the OpenShift server. The
 OpenShift master includes a built-in OAuth server. Developers and administrators
@@ -113,15 +112,19 @@ the routes, services, deployments, and pods that you have running as part of
 your project.  For this example, you will see a frontend that is deployed to
 two pods.
 
-![Web Console](../images/webconsole2.png)
+![Project Overview](../images/webconsole2.png)
 
-Once you have digested the information on the overview page, click on the Browse tab on the left hand side of the screen:
+Once you have digested the information on the overview page, click on the Browse tab on the left hand side of the screen, and then click on *Pods*:
 
-![Web Console](../images/webconsole3.png)
+![Listing Pods](../images/webconsole3.png)
+
+A list of the running pods and potentially the pod that was used during the image build is displayed. Click on one of the running pods to display a detailed set of information relating to the deployed pod including viewing the logs emitted by the pods on the *Logs* tab.
+
+![Pod Overview](../images/webconsole4.png)
 
 Go ahead and play around a bit more with the web console to get familiar with
 the various tabs and options.  However, we will be using the command line tools
-for the majority of this lab.
+for the majority of these lab.
 
 
-**End of Lab 2**
+**End of Lab 1**

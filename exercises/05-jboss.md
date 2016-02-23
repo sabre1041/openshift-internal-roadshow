@@ -1,8 +1,8 @@
-#** Lab 6: Deploying Java Code on JBoss**
+#**Lab 5: Deploying Java Code on JBoss**
 
-###** Background: Source-to-Image (S2I) **
+###**Background: Source-to-Image (S2I)**
 
-In lab three we learned how to deploy a standard Docker image. Now we will
+In lab two we learned how to deploy a standard Docker image. Now we will
 expand on that a bit by learning how have OpenShift build a Docker image using
 source code from an existing repository. To help with this, the OpenShift team
 provides a set of Docker images that are enabled for a more generic build
@@ -33,7 +33,7 @@ it's magic.
 
 **Tip:** Red Hat provides a number of S2I-enabled runtimes with OpenShift, and
 you can find more about them in [the
-documentation](https://docs.openshift.com/enterprise/3.0/using_images/s2i_images/overview.html).
+documentation](https://docs.openshift.com/enterprise/3.1/using_images/s2i_images/overview.html).
 
 ####**Exercise 4: Creating a JBoss EAP application**
 
@@ -43,7 +43,7 @@ performs 2D geo-spatial queries against a MongoDB database to locate and map all
 Red Hat offices in North America. That was just a fancy way
 of saying that we are going to deploy a map of Red Hat Offices.
 
-#####** Create Project **
+#####**Create Project *
 
 The first thing you need to do is create a new project called *CITYNAMEuserXX-rhtoffices*:
 
@@ -55,7 +55,7 @@ You should see the following output:
 
 	Now using project "CITYNAMEuserXX-rhtoffices" on server "https://master.CITYNAME-roadshow.rhc-ose.labs.redhat.com:8443".
 
-#####** Fork application code on GitHub **
+#####**Fork application code on GitHub**
 
 OpenShift can work with git repositories on GitHub. You can even register
 webhooks to initiate OpenShift builds triggered by any update to the application
@@ -72,7 +72,7 @@ nothing special about our application - it is a standard, plain-old JEE
 application.
 
 
-#####** Combine the code with the Docker image on OpenShift **
+#####**Combine the code with the Docker image on OpenShift**
 
 The *new-app* command makes it very easy to get OpenShift to build code from a
 GitHub repository into a Docker image.  Now that you have your own GitHub
@@ -83,18 +83,26 @@ application in a previous lab. However, this time we are going to specify a
 source code repository to use by using the ~ modifier as shown in the following
 command:
 
-	$ oc new-app eap64-openshift~https://github.com/sabre1041/ose-rht-offices.git
+	$ oc new-app jboss-eap64-openshift~https://github.com/sabre1041/ose-rht-offices.git
 
 **Note:** Ensure that you use your repository URL if you want to see S2I in action later.
 
 Once you enter in the above command, you should see output similar to the following:
 
-	imagestreams/ose-rht-offices
-	buildconfigs/ose-rht-offices
-	deploymentconfigs/ose-rht-offices
-	services/ose-rht-offices
-	A build was created - you can run `oc start-build ose-rht-offices` to start it.
-	Service "ose-rht-offices" created at 172.30.220.2 with port mappings 8080.
+    --> Found image cd9c119 (10 weeks old) in image stream "jboss-eap64-openshift in project openshift" under tag :latest for "jboss-eap64-openshift"
+        * A source build using source code from https://github.com/sabre1041/ose-rht-offices.git will be created
+        * The resulting image will be pushed to image stream "ose-rht-offices:latest"
+        * This image will be deployed in deployment config "ose-rht-offices"
+        * Ports 8080/tcp, 8443/tcp, 8778/tcp will be load balanced by service "ose-rht-offices"
+    --> Creating resources with label app=ose-rht-offices ...
+        ImageStream "ose-rht-offices" created
+        BuildConfig "ose-rht-offices" created
+        DeploymentConfig "ose-rht-offices" created
+        Service "ose-rht-offices" created
+    --> Success
+        Build scheduled for "ose-rht-offices" - use the logs command to track its progress.
+        Run 'oc status' to view your app.
+.
 
 Keep an eye on the Pods that are created as the build and deployment happens.
 Remember, this is a new Java-based project that uses Maven as the build and
@@ -104,8 +112,7 @@ as Maven downloads all of the dependencies needed for the application.
 In a few moments, OpenShift will automatically start the first build for you.
 You can see this in the web console:
 
-    A build of ose-rht-offices is running. A new deployment will be created
-    automatically once the build completes.
+    Build ose-rht-offices #1 is running. A new deployment will be created automatically once the build completes
 
 You can also see this with the *oc* command:
 
@@ -113,8 +120,8 @@ You can also see this with the *oc* command:
 
 Once your first build is running, you'll see output like:
 
-    NAME                   TYPE      STATUS    POD
-    ose-rht-offices-1   Source    Running   ose-rht-offices-1-build
+    NAME                TYPE      FROM          STATUS    STARTED         DURATION
+    ose-rht-offices-1   Source    Git@0b16352   Running   2 minutes ago   2m54s
 
 Once the build is running, you are able to view the build logs with the following
 command:
@@ -153,8 +160,8 @@ And finally, you can find your URL by viewing the project in the web console or 
 
 Where you should see something like the following:
 
-	NAME                 HOST/PORT                                                           PATH      SERVICE              LABEL              TLS TERMINATION
-	ose-rht-offices   ose-rht-offices.CITYNAMEuserXX-rhtoffices.apps.CITYNAME-roadshow.rhc-ose.labs.redhat.com             ose-rht-offices             app=ose-rht-offices      
+	NAME              HOST/PORT                                                                              PATH      SERVICE           LABELS                INSECURE POLICY   TLS TERMINATION
+    ose-rht-offices   ose-rht-offices-oseuser-rhtoffices.apps.CITYNAME-roadshow.rhc-ose.labs.redhat.com             ose-rht-offices   app=ose-rht-offices      
 
 In the above example, the URL is:
 
@@ -170,4 +177,4 @@ because we haven't actually added a database to the application yet.  We will do
 that in the next lab. Congratulations on deploying your first application
 using S2I on the OpenShift 3 Platform!
 
-**End of Lab 6**
+**End of Lab 5**

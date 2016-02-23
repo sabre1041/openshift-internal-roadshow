@@ -1,4 +1,4 @@
-#** Lab 7: Adding a Database**
+#**Lab 6: Adding a Database**
 
 Most useful applications are "stateful" or "dynamic" in some way, and this is
 usually achieved with a database or other data storage. In this next lab we are
@@ -16,7 +16,7 @@ place to store their data.
 OpenShift is shipped with a number of application runtime and database templates
 that make things like this easy. We will cover templates at the end of the lab.
 
-###** Environment Variables **
+###**Environment Variables**
 When we use the *new-app* command this time, we need to pass in some environment
 variables to be used inside the container. These environment variables are
 required to set the username, password, and name of the database. You can change
@@ -83,7 +83,7 @@ You should see the following section:
 		}
 	],
 
-###** OpenShift Magic **
+###**OpenShift Magic**
 As soon as we set the environment variables on the DeploymentConfiguration, some
 magic happened. OpenShift decided that this was a significant enough change to
 warrant updating the internal version number of the DeploymentConfiguration. You
@@ -107,7 +107,7 @@ If you refresh your application:
 
     http://ose-rht-offices.CITYNAMEuserXX-rhtoffices.apps.CITYNAME-roadshow.rhc-ose.labs.redhat.com/
 
-You'll notice that the ballparks suddenly are showing up. That's really cool!
+You'll notice that the offices suddenly are showing up. That's really cool!
 
 You are probably wondering how this magically started working?  When deploying
 applications to OpenShift, it is always best to use environment variables to
@@ -122,10 +122,10 @@ In short summary: By referring to environment variables to connect to services
 lifecycle environments on OpenShift without having to modify application code.
 
 You can learn more about environment variables in the [environment
-variables](https://docs.openshift.com/enterprise/3.0/dev_guide/environment_variables.html)
+variables](https://docs.openshift.com/enterprise/3.1/dev_guide/environment_variables.html)
 section of the Developer Guide.
 
-###**Using the Mongo command line shell in the container **
+###**Using the Mongo command line shell in the container**
 
 To interact with our database we will use the *oc exec* command, which allows us
 to run arbitrary commands in our Pods. In this example we are going to use the
@@ -152,4 +152,4 @@ You can also view the json documents with the following command:
 
 	> db.offices.find();
 
-**End of Lab 7**
+**End of Lab 6**

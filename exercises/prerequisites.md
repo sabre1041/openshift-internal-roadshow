@@ -1,4 +1,4 @@
-#** Lab 1: Installing the OpenShift CLI **
+#**Prerequisites: Installing the OpenShift CLI**
 
 ###**Command Line Interface**
 
@@ -9,7 +9,7 @@ OpenShift 3 ships with a feature rich web console as well as command line tools 
 - Linux
 
 ####**Downloading the tools**
-During this lab, we are going to download the client tool and add them to our operating system $PATH environment variables so the executable is accessible from any directory on the command line. 
+We are going to download the client tool and add them to our operating system $PATH environment variables so the executable is accessible from any directory on the command line. 
 
 The first thing we want to do is download the executable from the Red Hat customer portal:
 
@@ -82,4 +82,4 @@ If you get an error message, you have not updated your path correctly.  If you n
 
 
 
-**End of Lab 1**
+**End of Prerequisites**

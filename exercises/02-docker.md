@@ -1,9 +1,9 @@
-#** Lab 3: Deploy a Docker Image **
+#**Lab 2: Deploy a Docker Image**
 
-###** Background: Containers and Pods **
+###**Background: Containers and Pods**
 
 Before we start digging in we need to understand how containers and pods are
-related. Given the morning sessions where we discussed the OpenShift platform
+related. Given the overview presentation where we discussed the OpenShift platform
 and how it uses containers and pods, we will not be covering the background on
 these technologies in this lab.  Instead, we will dive right in and start using
 them.
@@ -65,7 +65,7 @@ to space considerations of this workshop manual):
                 "name": "smoke"
             },...............
             
-###** Exercise 1: Deploying your first Image **
+###**Exercise 1: Deploying your first Image**
 
 Let's start by doing the simplest thing possible - get a plain old Docker image
 to run inside of OpenShift. This is incredibly simple to do. We are going to use
@@ -100,11 +100,17 @@ Docker image, you can simply execute the following command:
     
 You will see output similar to the following:
 
-    imagestreams/guestbook
-    deploymentconfigs/guestbook
-    services/guestbook
-    Service "guestbook" created at 172.30.208.199 with port mappings 3000.
-    Run 'oc status' to view your app.
+    --> Found Docker image a49fe18 (16 months old) from Docker Hub for "kubernetes/guestbook"
+        * An image stream will be created as "guestbook:latest" that will track this image
+        * This image will be deployed in deployment config "guestbook"
+        * Port 3000/tcp will be load balanced by service "guestbook"
+    --> Creating resources with label app=guestbook ...
+        ImageStream "guestbook" created
+        DeploymentConfig "guestbook" created
+        Service "guestbook" created
+    --> Success
+        Run 'oc status' to view your app.
+
 
 Pretty easy, huh?
 
@@ -119,7 +125,7 @@ deployment by:
 1. Select *Browse*
 1. Select *Pods* 
 
-Under status you will see pending with the arrows circling (rather than
+Under status you may see pending with the arrows circling (rather than
 running).
 
 You can also use the *oc* command line tool and keep checking on the pod
@@ -136,9 +142,9 @@ If it doesn't, it will pull it from the specified registry.
 
 There are a number of ways to customize this behavior. They are documented in
 [specifying an
-image](https://docs.openshift.com/enterprise/3.0/dev_guide/new_app.html#specifying-an-image)
+image](https://docs.openshift.com/enterprise/3.1/dev_guide/new_app.html#specifying-an-image)
 as well as [image pull
-policy](https://docs.openshift.com/enterprise/3.0/architecture/core_concepts/builds_and_image_streams.html#image-pull-policy).
+policy](https://docs.openshift.com/enterprise/3.1/architecture/core_concepts/builds_and_image_streams.html#image-pull-policy).
 
 WINNING! These few commands are the only ones you need to run to get a "vanilla"
 Docker image deployed on OpenShift 3. This should work with any Docker image
@@ -155,16 +161,16 @@ does not allow the deployment of Docker images that run as *root* by default.
 If you want or need to allow OpenShift users to deploy Docker images that do
 expect to run as root (or any specific user), a small configuration change is
 needed. You can learn more about the [Docker
-guidelines](https://docs.openshift.com/enterprise/3.0/creating_images/guidelines.html)
+guidelines](https://docs.openshift.com/enterprise/3.1/creating_images/guidelines.html)
 for OpenShift 3, or you can look at the section on [enabling images to run with
 a USER in the
-dockerfile](https://docs.openshift.com/enterprise/3.0/admin_guide/manage_scc.html#enable-images-to-run-with-user-in-the-dockerfile).
+dockerfile](https://docs.openshift.com/enterprise/3.1/admin_guide/manage_scc.html#enable-images-to-run-with-user-in-the-dockerfile).
 
 **Note:** The "new-app" command currently only creates a Service for the first
 EXPOSEd port in the Docker image.  If additional Services are required, you can
 always create them using the *oc expose* command.
 
-####** Background: Services **
+####**Background: Services**
 
 You can see that when we ran the *new-app* command, OpenShift actually created
 several resources behind the scenes in order to handle deploying this Docker
@@ -182,7 +188,7 @@ different except that the Service was now doing a better job handling the
 requests.
 
 There is a lot more information about
-[Services](https://docs.openshift.com/enterprise/3.0/architecture/core_concepts/pods_and_services.html#services),
+[Services](https://docs.openshift.com/enterprise/3.1/architecture/core_concepts/pods_and_services.html#services),
 including the JSON format to make one by hand, in the official documentation.
 
 Now that we understand the basics of what a Service is, let's take a look at the
@@ -194,8 +200,8 @@ following command:
     
 You should see output similar to the following:
 
-	NAME        LABELS    SELECTOR                     IP(S)            PORT(S)
-	guestbook   app=guestbook    deploymentconfig=guestbook   172.30.208.199   3000/TCP
+	NAME        CLUSTER_IP       EXTERNAL_IP   PORT(S)    SELECTOR                                   AGE
+	guestbook   172.30.149.111   <none>        3000/TCP   app=guestbook,deploymentconfig=guestbook   4h
     
 In the above output, we can see that we have a Service named *guestbook* with an
 IP/Port combination of 172.30.208.199/3000. Your IP address may be different, as
@@ -217,8 +223,14 @@ You should see output similar to the following:
             "namespace": "CITYNAMEuserXX-guestbook",
             "selfLink": "/api/v1/namespaces/CITYNAMEuserXX-guestbook/services/guestbook",
             "uid": "65f22d41-36e3-11e5-8992-0a8636c3fd6f",
-            "resourceVersion": "177904",
+            "resourceVersion": "21683",
             "creationTimestamp": "2015-07-30T17:50:00Z"
+            "labels": {
+                "app": "guestbook"
+            },
+            "annotations": {
+                "openshift.io/generated-by": "OpenShiftNewApp"
+            }
         },
         "spec": {
             "ports": [
@@ -231,9 +243,11 @@ You should see output similar to the following:
                 }
             ],
             "selector": {
+                "app": "guestbook",
                 "deploymentconfig": "guestbook"
             },
             "portalIP": "172.30.208.199",
+            "clusterIP": "172.30.149.111",
             "type": "ClusterIP",
             "sessionAffinity": "None"
         },
@@ -262,12 +276,13 @@ Now you can view the detailed data for your pod with the following command:
 Under the *"metadata"* section you should see the following:
 
     "labels": {
+                "app": "guestbook",
                 "deployment": "guestbook-1",
                 "deploymentconfig": "guestbook"
             },
 
 * The Service has *selector* stanza that refers to "deploymentconfig=guestbook".
-* The Pod has multiple labels, one of which is "deploymentconfig=guestbook". 
+* The Pod has multiple labels, one of which is "app=guestbook" and the other is "deploymentconfig=guestbook". 
 
 Labels are just key/value pairs. Any Pod in this Project that has a label that
 matches the *selector* will be associated with the Service. To see this in
@@ -278,7 +293,8 @@ action, issue the following command:
 You should see the following output:
 
     Name:                   guestbook
-    Labels:                 <none>
+    Namespace:	            CITYNAMEuserXX-guestbook
+    Labels:                 app=guestbook
     Selector:               deploymentconfig=guestbook
     Type:                   ClusterIP
     IP:                     172.30.208.199
@@ -292,4 +308,4 @@ only one *guestbook* Pod running.  In the next lab, we will learn how to scale
 an application, at which point you will be able to see multiple endpoints
 associated with the *guestbook* Service.
 
-**End of Lab 3**
+**End of Lab 2**

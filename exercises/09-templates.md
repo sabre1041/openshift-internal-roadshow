@@ -1,4 +1,4 @@
-#** Lab 9: Using Templates**
+#**Lab 9: Using Templates**
 
 Running all these individual commands can be tedious and error prone.
 Fortunately for you, all of this configuration can be put together into a
@@ -34,25 +34,40 @@ Are you ready for the magic command?  Here it is:
 
 You will see the following output:
 
-	buildconfigs/rhtoffices
-	imagestreams/rhtoffices
-	deploymentconfigs/rhtoffices-mongodb
-	deploymentconfigs/rhtoffices
-	routes/rhtoffices-http-route
-	services/mongodb
-	services/rhtoffices-http
-	services/rhtoffices-ping
-	A build was created - you can run `oc start-build rhtoffices` to start it.
-	Service "mongodb" created at 172.30.232.19 with port mappings 27017.
-	Service "rhtoffices-http" created at 172.30.186.7 with port mappings 8080.
-	Service "rhtoffices-ping" created at 172.30.176.102 with port mappings 8888.
+    --> Deploying template rhtoffices for "rhtoffices"
+        With parameters:
+        APPLICATION_NAME=rhtoffices
+        APPLICATION_HOSTNAME=
+        GIT_URI=https://github.com/sabre1041/ose-rht-offices.git
+        GIT_REF=master
+        MONGODB_DATABASE=root
+        IMAGE_STREAM_NAMESPACE=openshift
+        DATABASE_SERVICE_NAME=mongodb
+       MONGODB_USER=user5UJ # generated
+       MONGODB_PASSWORD=IePONrj5 # generated
+       MONGODB_ADMIN_PASSWORD=ttpkf2EG # generated
+       GITHUB_TRIGGER_SECRET=oGiNRHaH # generated
+       GENERIC_TRIGGER_SECRET=fCRbCdCW # generated
+    --> Creating resources with label app=rhtoffices ...
+        BuildConfig "rhtoffices" created
+        ImageStream "rhtoffices" created
+        DeploymentConfig "mongodb" created
+        DeploymentConfig "rhtoffices" created
+        Route "rhtoffices-http-route" created
+        Service "mongodb" created
+        Service "rhtoffices-http" created
+        Service "rhtoffices-ping" created
+    --> Success
+        Build scheduled for "rhtoffices" - use the logs command to track its progress.
+        Run 'oc status' to view your app.
+
 
 One other nifty thing that happened is that a route was created for you automatically as well.  Check it out:
 
 	$ oc get routes
 
-	NAME                  HOST/PORT                                                             PATH      SERVICE         LABELS
-	rhtoffices-http-route   rhtoffices-http-route-CITYNAMEuserXX-template.apps.CITYNAME-roadshow.rhc-ose.labs.redhat.com             rhtoffices-http   application=rhtoffices,template=rhtoffices
+	NAME                    HOST/PORT                                                                                  PATH      SERVICE           LABELS                                                               INSECURE POLICY   TLS TERMINATION
+    rhtoffices-http-route   rhtoffices-http-route-oseuser-template.apps.CITYNAME-roadshow.rhc-ose.labs.redhat.com             rhtoffices-http   app=rhtoffices,application=rhtoffices,template=rhtoffices-template
 
 OpenShift will automatically start a build for you. When it is complete, visit
 your app. Does it work? Think about how this could be used in your environment.

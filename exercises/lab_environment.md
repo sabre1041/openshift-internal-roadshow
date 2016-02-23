@@ -1,4 +1,4 @@
-#** Lab 0: Environment Overview **
+#**Environment Overview**
 
 You will be interacting with an OpenShift environment that is installed on top
 of Red Hat's internal cloud, OS1. The OpenShift environment 
