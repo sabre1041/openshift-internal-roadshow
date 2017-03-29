@@ -63,7 +63,7 @@ code on GitHub.
 
 The repository that we are going to fork is located at the following URL:
 
-[https://github.com/sabre1041/ose-rht-offices.git](https://github.com/sabre1041/ose-rht-offices.git")
+[https://github.com/sabre1041/ose-rht-offices.git](https://github.com/sabre1041/ose-rht-offices.git)
 
 Go ahead and fork the *ose-rht-offices* repository into your own GitHub account. Later
 in the lab, we want you to make a code change and then rebuild your application.
